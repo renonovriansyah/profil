@@ -1,258 +1,283 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevSpaces</title>
-    <!-- Tailwind CSS CDN -->
+    <title>M. Reno Novriansyah | Portfolio</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Icon Library: Lucide -->
-    <script src="https://unpkg.com/lucide-react@latest/dist/lucide-react.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
-        /* Menggunakan font Inter sebagai default */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a; /* Latar belakang gelap */
-            color: #e2e8f0; /* Teks terang */
+            background-color: #020617;
         }
-        /* Efek gradien pada latar belakang hero section */
-        .hero-gradient {
-            background: radial-gradient(ellipse at top, rgba(14, 165, 233, 0.15) 0%, #0a0a0a 50%);
+        .skill-chip {
+            background: linear-gradient(145deg, #1e293b, #0f172a); /* Latar belakang gradient gelap */
+            color: #bae6fd; /* Warna teks biru langit terang */
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 600;
+            border: 1px solid #38bdf8; /* Border biru langit */
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); /* Efek glow/bayangan biru */
+            transition: all 0.3s ease;
+            cursor: default;
         }
-        /* Efek gradien pada latar belakang fitur */
-        .feature-gradient {
-            background: radial-gradient(ellipse at bottom, rgba(79, 70, 229, 0.1) 0%, #0a0a0a 50%);
+        .skill-chip:hover {
+            color: #ffffff;
+            border-color: #7dd3fc;
+            box-shadow: 0 0 25px rgba(125, 211, 252, 0.4); /* Glow lebih terang saat hover */
+            transform: translateY(-3px) scale(1.03); /* Efek terangkat lebih terasa */
         }
-        /* Styling untuk elemen yang akan dianimasikan saat scroll */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        .project-card a {
+            position: relative; /* Wajib ada untuk menampung elemen ::before */
+            overflow: hidden;   /* Kunci utama agar kilauannya tidak keluar dari kartu */
+            display: block;     /* Memastikan link mengisi seluruh area kartu */
         }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
+
+        /* Kedua, kita buat elemen 'cahaya' kilauannya */
+        .project-card a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%; /* Mulai dari luar layar sebelah kiri */
+            width: 75%;
+            height: 100%;
+            
+            /* Ini adalah 'cahaya' kilaunya: gradient dari transparan ke putih lalu transparan lagi */
+            background: linear-gradient(
+                120deg, 
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.15) 50%, 
+                rgba(255, 255, 255, 0) 100%
+            );
+
+            transform: skewX(-25deg); /* Membuat kilaunya terlihat miring */
+            transition: left 0.8s cubic-bezier(0.23, 1, 0.32, 1); /* Atur kecepatan animasi */
         }
+
+        /* Terakhir, kita picu animasinya saat kartu di-hover */
+        .project-card:hover a::before {
+            left: 125%; /* Gerakkan elemen 'cahaya' ke luar layar sebelah kanan */
+        }
+        @keyframes breathe {
+            0%, 100% { box-shadow: 0 0 20px 2px rgba(56, 189, 248, 0.2), 0 0 40px 5px rgba(56, 189, 248, 0.1); }
+            50% { box-shadow: 0 0 40px 5px rgba(56, 189, 248, 0.4), 0 0 80px 10px rgba(56, 189, 248, 0.2); }
+        }
+        .animate-breathe {
+            animation: breathe 4s ease-in-out infinite;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #7dd3fc; }
     </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-950 to-slate-900 text-slate-300 overflow-x-hidden">
 
-    <!-- Header / Navigasi -->
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md border-b border-gray-800 transition-all duration-300">
+    <div id="splash-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 to-slate-900 transition-opacity duration-1000">
+        <div class="relative">
+            <img src="images/profile.png" alt="Foto Profil M. Reno Novriansyah" class="w-40 h-40 rounded-full object-cover border-2 border-sky-400/50 animate-breathe">
+        </div>
+        <h1 class="mt-8 text-3xl md:text-4xl font-bold text-white"><span id="typed-name"></span></h1>
+        <p class="mt-3 text-center text-sm md:text-base text-slate-400 px-4"><span id="typed-tagline"></span></p>
+        <button id="visit-profile-btn" class="opacity-0 mt-12 flex items-center gap-3 bg-sky-400 text-slate-950 font-bold py-3 px-8 rounded-full transition-all duration-500 hover:bg-sky-300 hover:scale-105 transform">
+            Visit Profile
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 opacity-0 transition-opacity duration-1000 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-xl font-bold text-sky-400 hover:text-sky-300 transition-colors">M. Reno Novriansyah</a>
             <nav class="hidden md:flex space-x-8">
-                <a href="#about" class="text-gray-300 hover:text-sky-400 transition-colors">About Me</a>
-                <a href="#contact" class="text-gray-300 hover:text-sky-400 transition-colors">Contact</a>
+                <a href="#about" class="text-slate-300 hover:text-sky-400 transition-colors">About</a>
+                <a href="#skills" class="text-slate-300 hover:text-sky-400 transition-colors">Skills</a>
+                <a href="#projects" class="text-slate-300 hover:text-sky-400 transition-colors">Projects</a>
+                <a href="#contact" class="text-slate-300 hover:text-sky-400 transition-colors">Contact</a>
             </nav>
-            <a href="https://wa.me/6282289669969?text=Hello,%20I'm%20interested%20in%20your%20work." target="_blank" class="hidden md:block bg-sky-500 text-white px-5 py-2 rounded-md hover:bg-sky-600 transition-all duration-300 font-semibold">
-                Contact Me
-            </a>
-            <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+             <button id="mobile-menu-button" class="md:hidden text-slate-300 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
             </button>
         </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 border-t border-gray-800">
-            <a href="#about" class="block py-2 text-gray-300 hover:text-sky-400">About Me</a>
-            <a href="#portfolio" class="block py-2 text-gray-300 hover:text-sky-400">Portfolio</a>
-            <a href="#contact" class="block py-2 text-gray-300 hover:text-sky-400">Contact</a>
-             <a href="https://wa.me/6282289669969?text=Hello,%20I'm%20interested%20in%20your%20work." target="_blank" class="mt-2 block w-full text-center bg-sky-500 text-white px-5 py-2 rounded-md hover:bg-sky-600 transition-all duration-300 font-semibold">
-                Contact Me
-            </a>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 border-t border-slate-800">
+            <a href="#about" class="block py-2 text-slate-300 hover:text-sky-400">About</a>
+            <a href="#skills" class="block py-2 text-slate-300 hover:text-sky-400">Skills</a>
+            <a href="#projects" class="block py-2 text-slate-300 hover:text-sky-400">Projects</a>
+            <a href="#contact" class="block py-2 text-slate-300 hover:text-sky-400">Contact</a>
         </div>
     </header>
 
-    <main class="pt-20">
-
-        <!-- Hero Section -->
-        <section id="hero" class="hero-gradient py-20 md:py-32">
-            <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight mb-4 reveal">
-                    Welcome to My Portfolio
-                </h1>
-                <p class="text-lg md:text-xl text-sky-400 font-semibold mb-6 reveal" style="transition-delay: 150ms;">
-                    Web Developer & UI/UX Designer
-                </p>
-                <p class="max-w-3xl mx-auto text-gray-400 mb-10 reveal" style="transition-delay: 300ms;">
-                    I am a passionate professional dedicated to creating innovative and functional digital solutions. I specialize in modern web development and user-friendly interface design.
-                </p>
-                <a href="#portfolio" class="bg-sky-500 text-white px-8 py-3 rounded-md hover:bg-sky-600 transition-all duration-300 text-lg font-semibold reveal" style="transition-delay: 450ms;">
-                    View My Work
-                </a>
-            </div>
-        </section>
-
-        <!-- About Me Section -->
-        <section id="about" class="py-20 feature-gradient">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white reveal">About Me</h2>
-                    <div class="w-24 h-1 bg-sky-500 mx-auto mt-4 reveal"></div>
+    <main id="main-content" class="opacity-0 transition-opacity duration-1000">
+        
+        <section id="about" class="pt-32 pb-20 px-6">
+            <div class="container mx-auto">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white" data-aos="fade-up">About Me</h2>
+                    <div class="w-24 h-1 bg-sky-500 mx-auto mt-4" data-aos="fade-up" data-aos-delay="100"></div>
                 </div>
                 <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
-                    <div class="md:w-1/3 text-center reveal" style="transition-delay: 150ms;">
-                        <img src="images/profile.png" alt="Foto Profil" class="w-64 h-64 rounded-full mx-auto border-4 border-gray-700 shadow-lg">
+                    <div class="md:w-1/3 text-center" data-aos="fade-right" data-aos-delay="200">
+                        <img src="images/profile.png" alt="Foto Profil" class="w-64 h-64 rounded-full mx-auto border-4 border-slate-700 shadow-lg object-cover">
                     </div>
-                    <div class="md:w-2/3 reveal" style="transition-delay: 300ms;">
-                        <p class="text-gray-300 text-lg mb-6 leading-relaxed">
-                            Hello! My name is M. Reno Novriansyah. With over 2 years of experience in the tech industry, I focus on developing fast, responsive, and intuitive web applications. I am always excited to learn new technologies and apply them to solve real-world problems.
+                    <div class="md:w-2/3" data-aos="fade-left" data-aos-delay="300">
+                        <p class="text-slate-400 text-base md:text-lg mb-6 leading-relaxed">
+                            An Information Systems student passionate about the intersection of technology and art. I tell stories through visually-driven websites, mobile development with Flutter, and freelance photography.
                         </p>
-                        <h3 class="text-xl font-semibold text-white mb-4">Main Skills:</h3>
+                        <h3 class="text-xl font-semibold text-white mb-4">Focus Areas:</h3>
                         <div class="flex flex-wrap gap-3">
-                            <span class="bg-gray-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">HTML & CSS</span>
-                            <span class="bg-gray-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">JavaScript</span>
-                            <span class="bg-gray-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">PHP</span>
-                            <span class="bg-gray-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">Tailwind CSS</span>
+                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">Web Development</span>
+                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">Mobile Application</span>
+                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">Photography</span>
+                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">UI/UX Design</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Portfolio Section -->
-        <section id="portfolio" class="py-20">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white reveal">Project Portfolio</h2>
-                    <p class="text-gray-400 mt-2 max-w-2xl mx-auto reveal">Here are some selected projects I've worked on.</p>
-                    <div class="w-24 h-1 bg-sky-500 mx-auto mt-4 reveal"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    
-                    <!-- Project 1 -->
-                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 reveal">
-                        <img src="images/project1.png" alt="Project 1" class="w-full h-56 object-cover object-top">
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2">SKIN / DIARY - Skincare Routine Reminder</h3>
-                            <p class="text-gray-400 mb-4">A web application that helps users build consistency with their skincare routine through smart, personalized reminders and progress tracking in a clean, calming interface.</p>
-                            <a href="https://renonovriansyah.github.io/skinkeran" target="_blank" class="inline-block bg-sky-600 text-white px-5 py-2 rounded-md hover:bg-sky-700 transition-colors font-semibold text-sm">
-                                View Demo
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Project 2 -->
-                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 reveal" style="transition-delay: 150ms;">
-                        <img src="images/project2.png" alt="Project 2" class="w-full h-56 object-cover object-top">
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2">TableWork - Task Management Dashboard</h3>
-                            <p class="text-gray-400 mb-4">A task management dashboard designed for productivity, allowing users to easily add, track, and manage tasks with clear deadlines and a modern, user-friendly design.</p>
-                             <a href="https://renonovriansyah.github.io/tabeltugas" target="_blank" class="inline-block bg-sky-600 text-white px-5 py-2 rounded-md hover:bg-sky-700 transition-colors font-semibold text-sm">
-                                View Demo
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Project 3 -->
-                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:-translate-y-2 transition-transform duration-300 reveal" style="transition-delay: 300ms;">
-                        <img src="images/project3.png" alt="Project 3" class="w-full h-56 object-cover object-top">
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2">EduPlay - Math Puzzle</h3>
-                            <p class="text-gray-400 mb-4">An interactive math puzzle game for children that uses fun visuals and a level-based system to make learning basic algebra an engaging and enjoyable experience.</p>
-                            <a href="https://renonovriansyah.github.io/eduplay" target="_blank" class="inline-block bg-sky-600 text-white px-5 py-2 rounded-md hover:bg-sky-700 transition-colors font-semibold text-sm">
-                                View Demo
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
+        <section id="skills" class="py-20 px-6">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-12 bg-gradient-to-r from-sky-300 to-sky-500 text-transparent bg-clip-text" data-aos="fade-up">My Skills</h2>
+        <div class="max-w-4xl mx-auto flex flex-wrap justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
+                <span class="skill-chip">HTML & CSS</span>
+                <span class="skill-chip">JavaScript</span>
+                <span class="skill-chip">PHP</span>
+                <span class="skill-chip">Flutter</span>
+                <span class="skill-chip">Tailwind CSS</span>
+                <span class="skill-chip">UI/UX Design</span>
+                <span class="skill-chip">Git & GitHub</span>
+                <span class="skill-chip">Figma</span>
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="py-20 feature-gradient">
-            <div class="container mx-auto px-6 text-center">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white reveal">Contact Me</h2>
-                     <p class="text-gray-400 mt-2 max-w-2xl mx-auto reveal">Interested in collaborating? Feel free to contact me.</p>
-                    <div class="w-24 h-1 bg-sky-500 mx-auto mt-4 reveal"></div>
+        <section id="projects" class="py-20 px-6 bg-slate-900/50">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-12" data-aos="fade-up">Featured Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                <div class="project-card" data-aos="fade-up">
+                    <a href="https://renonovriansyah.github.io/skinkeran" target="_blank" rel="noopener noreferrer">
+                        <img src="images/project1.png" alt="SKIN / DIARY Project" class="project-image">
+                        <div class="project-overlay">
+                            <h3 class="project-title">SKIN / DIARY</h3>
+                            <p class="project-description">A web app to build and track skincare routines with smart reminders.</p>
+                        </div>
+                    </a>
                 </div>
-                <div class="max-w-md mx-auto reveal" style="transition-delay: 150ms;">
-                    <p class="text-lg text-gray-300 mb-8">
-                        You can reach me via email or the social media links below. I'll do my best to respond as soon as possible.
-                    </p>
-                    <a href="mailto:renonovriansyah9@gmail.com" class="inline-block bg-sky-500 text-white text-lg font-semibold px-8 py-3 rounded-md hover:bg-sky-600 transition-all duration-300">
-                        Send Email
+                <div class="project-card" data-aos="fade-up" data-aos-delay="100">
+                    <a href="https://renonovriansyah.github.io/tabeltugas" target="_blank" rel="noopener noreferrer">
+                        <img src="images/project2.png" alt="TableWork Project" class="project-image">
+                        <div class="project-overlay">
+                            <h3 class="project-title">TableWork</h3>
+                            <p class="project-description">A task management dashboard designed for productivity and organization.</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+                    <a href="https://renonovriansyah.github.io/eduplay" target="_blank" rel="noopener noreferrer">
+                        <img src="images/project3.png" alt="EduPlay Project" class="project-image">
+                        <div class="project-overlay">
+                            <h3 class="project-title">EduPlay - Math Puzzle</h3>
+                            <p class="project-description">An interactive math puzzle game for kids that makes learning algebra engaging.</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="project-card" data-aos="fade-up" data-aos-delay="300">
+                    <a href="https://renonovriansyah.github.io/jadwalkuliah" target="_blank" rel="noopener noreferrer">
+                        <img src="images/project4.png" alt="TimeBlock Pro Project" class="project-image">
+                        <div class="project-overlay">
+                            <h3 class="project-title">TimeBlock Pro</h3>
+                            <p class="project-description">Consolidated view of your class schedule and course chats for students.</p>
+                        </div>
                     </a>
                 </div>
             </div>
         </section>
 
-    </main>
+        <section id="contact" class="py-24 text-center px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-white" data-aos="fade-up">Interested in collaborating?</h2>
+            <p class="text-lg text-slate-400 mt-4 mb-8" data-aos="fade-up" data-aos-delay="100">Feel free to reach out to me.</p>
+            <a href="mailto:renonovriansyah9@gmail.com" class="inline-block bg-sky-400 text-slate-950 font-bold py-4 px-10 rounded-full transition-all duration-300 hover:bg-sky-300 hover:scale-105 transform" data-aos="fade-up" data-aos-delay="200">
+                Send an Email
+            </a>
+        </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-800 py-8">
-        <div class="container mx-auto px-6 text-center text-gray-400">
-            <div class="flex justify-center space-x-6 mb-4">
-                <!-- Ganti '#' dengan link sosial media Anda, nomor WA, dan email -->
-                <a href="https://wa.me/6282289669969?text=Hello,%20I'm%20interested%20in%20your%20work." target="_blank" aria-label="WhatsApp" class="text-gray-400 hover:text-white transition-colors">
-                    <svg role="img" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>WhatsApp</title><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                </a>
-                <a href="https://instagram.com/renovrnsyh11" target="_blank" aria-label="Instagram" class="text-gray-400 hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                </a>
-                <a href="mailto:renonovriansyah9@gmail.com" target="_blank" aria-label="Email" class="text-gray-400 hover:text-white transition-colors">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" viewPort="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                </a>
+        <footer class="text-center py-8 border-t border-slate-800">
+            <div class="flex justify-center gap-6 mb-4">
+                <a href="https://wa.me/6282289669969?text=Hello" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="https://instagram.com/renonvrnsyh11" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="mailto:renonovriansyah9@gmail.com" class="social-icon" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
             </div>
-            <p>&copy; <span id="year"></span> M. Reno Novriansyah. All Rights Reserved.</p>
-        </div>
-    </footer>
-
+            <p class="text-slate-500 text-sm">&copy; <span id="current-year"></span> M. Reno Novriansyah. All Rights Reserved.</p>
+        </footer>
+    </main>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script>
+        // --- MAIN SCRIPT LOGIC (Gabungan Versi 1 & 2) ---
         document.addEventListener('DOMContentLoaded', function() {
-            // Set tahun footer secara dinamis
-            document.getElementById('year').textContent = new Date().getFullYear();
+            
+            // 1. Initialize AOS (Animate on Scroll)
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 50,
+            });
 
-            // Handle mobile menu toggle
+            // 2. Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // 3. Splash Screen Logic
+            const splashScreen = document.getElementById('splash-screen');
+            const mainHeader = document.getElementById('main-header');
+            const mainContent = document.getElementById('main-content');
+            const visitBtn = document.getElementById('visit-profile-btn');
+
+            const typedName = new Typed('#typed-name', {
+                strings: ['M. Reno Novriansyah'],
+                typeSpeed: 60,
+                cursorChar: '_',
+                onComplete: () => {
+                    const typedTagline = new Typed('#typed-tagline', {
+                        strings: ['Information Systems Student | Web Developer | Photographer'],
+                        typeSpeed: 30,
+                        showCursor: false,
+                        startDelay: 200,
+                        onComplete: () => {
+                            setTimeout(() => {
+                                visitBtn.classList.remove('opacity-0');
+                            }, 500);
+                        }
+                    });
+                }
+            });
+
+            visitBtn.addEventListener('click', () => {
+                splashScreen.classList.add('opacity-0');
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                    mainHeader.classList.remove('opacity-0');
+                    mainContent.classList.remove('opacity-0');
+                    AOS.refresh();
+                }, 1000);
+            });
+            
+            // 4. Mobile Menu Logic (dari Versi 2)
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
-            
-            // Tutup menu mobile saat link di klik
             mobileMenu.addEventListener('click', (event) => {
-                if(event.target.tagName === 'A') {
-                     mobileMenu.classList.add('hidden');
-                }
-            });
-
-            // Animasi saat scroll
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
-
-            const elementsToReveal = document.querySelectorAll('.reveal');
-            elementsToReveal.forEach(el => {
-                observer.observe(el);
-            });
-            
-            // Menambahkan background pada header saat scroll
-            const header = document.getElementById('header');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('bg-black/80', 'border-gray-800');
-                    header.classList.remove('bg-black/30');
-                } else {
-                    header.classList.remove('bg-black/80', 'border-gray-800');
-                    header.classList.add('bg-black/30');
+                if (event.target.tagName === 'A') {
+                    mobileMenu.classList.add('hidden');
                 }
             });
         });
     </script>
-
 </body>
 </html>
-
