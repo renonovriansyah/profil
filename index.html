@@ -13,58 +13,113 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
+        /* 1. PERBAIKAN GLOBAL UNTUK MOBILE (BOX-SIZING) */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #020617;
+            /* overflow-x-hidden sudah ada di tag body, ini penting */
         }
+        
+        /* 2. GAYA UNTUK SKILL CHIP */
         .skill-chip {
-            background: linear-gradient(145deg, #1e293b, #0f172a); /* Latar belakang gradient gelap */
-            color: #bae6fd; /* Warna teks biru langit terang */
+            background: linear-gradient(145deg, #1e293b, #0f172a); 
+            color: #bae6fd; 
             padding: 10px 20px;
             border-radius: 9999px;
             font-weight: 600;
-            border: 1px solid #38bdf8; /* Border biru langit */
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); /* Efek glow/bayangan biru */
+            border: 1px solid #38bdf8; 
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); 
             transition: all 0.3s ease;
             cursor: default;
+            white-space: nowrap; /* Mencegah chip patah di mobile */
         }
         .skill-chip:hover {
             color: #ffffff;
             border-color: #7dd3fc;
-            box-shadow: 0 0 25px rgba(125, 211, 252, 0.4); /* Glow lebih terang saat hover */
-            transform: translateY(-3px) scale(1.03); /* Efek terangkat lebih terasa */
-        }
-        .project-card a {
-            position: relative; /* Wajib ada untuk menampung elemen ::before */
-            overflow: hidden;   /* Kunci utama agar kilauannya tidak keluar dari kartu */
-            display: block;     /* Memastikan link mengisi seluruh area kartu */
+            box-shadow: 0 0 25px rgba(125, 211, 252, 0.4); 
+            transform: translateY(-3px) scale(1.03); 
         }
 
-        /* Kedua, kita buat elemen 'cahaya' kilauannya */
+        /* 3. GAYA UNTUK PROJECT CARD (TERMASUK GLOW DAN KILAU) */
+        .project-card {
+            border-radius: 1rem;
+            background: #1e293b; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            height: 100%; /* Memastikan tinggi kartu sama di grid */
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5), 0 0 30px rgba(56, 189, 248, 0.5);
+        }
+        
+        .project-card a {
+            position: relative; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
+            padding: 1rem;
+            border-radius: 1rem;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Efek Kilauan (Shine Effect) pada gambar proyek */
         .project-card a::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%; /* Mulai dari luar layar sebelah kiri */
+            left: -100%; 
             width: 75%;
             height: 100%;
-            
-            /* Ini adalah 'cahaya' kilaunya: gradient dari transparan ke putih lalu transparan lagi */
             background: linear-gradient(
                 120deg, 
                 rgba(255, 255, 255, 0) 0%, 
                 rgba(255, 255, 255, 0.15) 50%, 
                 rgba(255, 255, 255, 0) 100%
             );
-
-            transform: skewX(-25deg); /* Membuat kilaunya terlihat miring */
-            transition: left 0.8s cubic-bezier(0.23, 1, 0.32, 1); /* Atur kecepatan animasi */
+            transform: skewX(-25deg); 
+            transition: left 0.8s cubic-bezier(0.23, 1, 0.32, 1); 
         }
-
-        /* Terakhir, kita picu animasinya saat kartu di-hover */
         .project-card:hover a::before {
-            left: 125%; /* Gerakkan elemen 'cahaya' ke luar layar sebelah kanan */
+            left: 125%; 
         }
+
+        .project-image {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* Rasio gambar untuk tampilan konsisten */
+            height: auto; 
+            object-fit: cover; 
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #334155; /* Border lembut */
+        }
+        
+        .project-overlay {
+            flex-grow: 1; 
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .project-description {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        /* 4. ANIMASI BREATHING GLOW PADA FOTO PROFIL (SPLASH SCREEN) */
         @keyframes breathe {
             0%, 100% { box-shadow: 0 0 20px 2px rgba(56, 189, 248, 0.2), 0 0 40px 5px rgba(56, 189, 248, 0.1); }
             50% { box-shadow: 0 0 40px 5px rgba(56, 189, 248, 0.4), 0 0 80px 10px rgba(56, 189, 248, 0.2); }
@@ -72,6 +127,125 @@
         .animate-breathe {
             animation: breathe 4s ease-in-out infinite;
         }
+
+        /* 5. GAYA JUDUL DENGAN EFEK NEON/GLOW */
+        .neon-title {
+            text-shadow: 0 0 7px #38bdf8, 0 0 10px #38bdf8, 0 0 21px #38bdf8, 0 0 42px #0ea5e9, 0 0 82px #0ea5e9;
+            color: #fff;
+        }
+
+        /* 6. GAYA BARU: Animasi Border Gradient untuk Tombol */
+        .btn-gradient-border {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            background: linear-gradient(145deg, #0f172a, #1e293b); /* Background gelap */
+            color: #bae6fd;
+            border-radius: 9999px; /* Tetap bulat */
+            padding: 1rem 2.5rem; /* Menyesuaikan padding agar tidak terlalu kecil */
+            font-weight: 700;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Bayangan standar */
+            border: none; /* Pastikan tidak ada border standar */
+        }
+
+        .btn-gradient-border::before {
+            content: '';
+            position: absolute;
+            top: -200%;
+            left: -200%;
+            width: 400%;
+            height: 400%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0%,
+                #38bdf8 20%, /* Warna utama glow */
+                #7dd3fc 40%, /* Warna kedua glow */
+                transparent 60%
+            );
+            z-index: -1;
+            animation: rotateBorder 4s linear infinite; /* Animasi rotasi */
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-gradient-border:hover::before {
+            background: conic-gradient(
+                from 0deg,
+                transparent 0%,
+                #7dd3fc 20%,
+                #38bdf8 40%,
+                transparent 60%
+            );
+            animation-play-state: paused; /* Opsional: Menghentikan animasi saat hover */
+        }
+        
+        .btn-gradient-border:hover {
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.6); /* Bayangan lebih terang saat hover */
+            transform: scale(1.05);
+        }
+
+        @keyframes rotateBorder {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 7. GAYA BARU: Hover Spotlight Effect */
+        .spotlight-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            background-color: #0f172a; /* Warna latar belakang kontainer */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            /* Tambahkan custom properties */
+            --x: 50%;
+            --y: 50%;
+        }
+
+        .spotlight-container:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 50px rgba(56, 189, 248, 0.2);
+        }
+
+        .spotlight-spotlight-element { /* Ini adalah elemen DIV baru yang akan kita tambahkan */
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%); /* Pusatkan elemen */
+            top: var(--y); /* Gunakan variabel JS */
+            left: var(--x); /* Gunakan variabel JS */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .spotlight-container:hover .spotlight-spotlight-element {
+            opacity: 1;
+        }
+
+        /* 8. GAYA BARU: Pulse Animation untuk Social Icons */
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .social-icon {
+            color: #94a3b8;
+            font-size: 1.5rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+            animation: pulseIcon 3s ease-in-out infinite; /* Animasi pulse */
+        }
+        .social-icon:hover {
+            color: #38bdf8;
+            transform: scale(1.3) !important; /* !important agar lebih kuat dari pulse */
+            animation-play-state: paused; /* Menghentikan pulse saat hover */
+        }
+
+        /* 9. SCROLLBAR (Sesuai aslinya) */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #1e293b; }
         ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; }
@@ -82,11 +256,11 @@
 
     <div id="splash-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 to-slate-900 transition-opacity duration-1000 overflow-x-hidden">
         <div class="relative">
-            <img src="images/profile.png" alt="Foto Profil M. Reno Novriansyah" class="w-40 h-40 rounded-full object-cover border-2 border-sky-400/50 animate-breathe">
+            <img src="images/profile.png" alt="Foto Profil M. Reno Novriansyah" class="w-40 h-40 rounded-full object-cover border-4 border-sky-400/50 animate-breathe">
         </div>
-        <h1 class="mt-8 text-3xl md:text-4xl font-bold text-white text-center px-4"><span id="typed-name"></span></h1>
+        <h1 class="mt-8 text-3xl md:text-4xl font-bold text-white text-center px-4 neon-title"><span id="typed-name"></span></h1>
         <p class="mt-3 text-center text-sm md:text-base text-slate-400 px-4"><span id="typed-tagline"></span></p>
-        <button id="visit-profile-btn" class="opacity-0 mt-12 flex items-center gap-3 bg-sky-400 text-slate-950 font-bold py-3 px-8 rounded-full transition-all duration-500 hover:bg-sky-300 hover:scale-105 transform">
+        <button id="visit-profile-btn" class="opacity-0 mt-12 flex items-center gap-3 btn-gradient-border shadow-lg hover:shadow-sky-400/50">
             Visit Profile
             <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -102,10 +276,10 @@
                 <a href="#contact" class="text-slate-300 hover:text-sky-400 transition-colors">Contact</a>
             </nav>
              <button id="mobile-menu-button" class="md:hidden text-slate-300 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-            </button>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+             </button>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 border-t border-slate-800">
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 border-t border-slate-800 transition-all duration-300 ease-in-out">
             <a href="#about" class="block py-2 text-slate-300 hover:text-sky-400">About</a>
             <a href="#skills" class="block py-2 text-slate-300 hover:text-sky-400">Skills</a>
             <a href="#projects" class="block py-2 text-slate-300 hover:text-sky-400">Projects</a>
@@ -118,11 +292,11 @@
         <section id="about" class="pt-32 pb-20 px-6">
             <div class="container mx-auto">
                  <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white" data-aos="fade-up">About Me</h2>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white neon-title" data-aos="fade-up">About Me</h2>
                     <div class="w-24 h-1 bg-sky-500 mx-auto mt-4" data-aos="fade-up" data-aos-delay="100"></div>
                 </div>
-                <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
-                    <div class="md:w-1/3 text-center" data-aos="fade-right" data-aos-delay="200">
+                <div class="spotlight-container flex flex-col md:flex-row items-center gap-10 md:gap-16">
+                    <div class="spotlight-spotlight-element"></div> <div class="md:w-1/3 text-center" data-aos="fade-right" data-aos-delay="200">
                         <img src="images/profile.png" alt="Foto Profil" class="w-64 h-64 rounded-full mx-auto border-4 border-slate-700 shadow-lg object-cover">
                     </div>
                     <div class="md:w-2/3" data-aos="fade-left" data-aos-delay="300">
@@ -131,18 +305,18 @@
                         </p>
                         <h3 class="text-xl font-semibold text-white mb-4">Focus Areas:</h3>
                         <div class="flex flex-wrap gap-3">
-                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">Web Development</span>
-                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">Mobile Application</span>
-                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">Photography</span>
-                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium">UI/UX Design</span>
+                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium shadow-md">Web Development</span>
+                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium shadow-md">Mobile Application</span>
+                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium shadow-md">Photography</span>
+                            <span class="bg-slate-800 text-sky-300 px-4 py-2 rounded-full text-sm font-medium shadow-md">UI/UX Design</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
+        
         <section id="skills" class="py-20 px-6">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-12 bg-gradient-to-r from-sky-300 to-sky-500 text-transparent bg-clip-text" data-aos="fade-up">My Skills</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-12 neon-title" data-aos="fade-up">My Skills</h2>
         <div class="max-w-4xl mx-auto flex flex-wrap justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
                 <span class="skill-chip">HTML & CSS</span>
                 <span class="skill-chip">JavaScript</span>
@@ -151,13 +325,13 @@
                 <span class="skill-chip">Tailwind CSS</span>
                 <span class="skill-chip">UI/UX Design</span>
                 <span class="skill-chip">Git & GitHub</span>
-                <span class="skill-chip">Figma</span>
             </div>
         </section>
 
         <section id="projects" class="py-20 px-6 bg-slate-900/50">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-12" data-aos="fade-up">Featured Projects</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-12 neon-title" data-aos="fade-up">Featured Projects</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                
                 <div class="project-card" data-aos="fade-up">
                     <a href="https://renonovriansyah.github.io/skinkeran" target="_blank" rel="noopener noreferrer">
                         <img src="images/project1.png" alt="SKIN / DIARY Project" class="project-image">
@@ -167,6 +341,7 @@
                         </div>
                     </a>
                 </div>
+                
                 <div class="project-card" data-aos="fade-up" data-aos-delay="100">
                     <a href="https://renonovriansyah.github.io/tabeltugas" target="_blank" rel="noopener noreferrer">
                         <img src="images/project2.png" alt="TableWork Project" class="project-image">
@@ -176,6 +351,7 @@
                         </div>
                     </a>
                 </div>
+                
                 <div class="project-card" data-aos="fade-up" data-aos-delay="200">
                     <a href="https://renonovriansyah.github.io/eduplay" target="_blank" rel="noopener noreferrer">
                         <img src="images/project3.png" alt="EduPlay Project" class="project-image">
@@ -185,6 +361,7 @@
                         </div>
                     </a>
                 </div>
+                
                 <div class="project-card" data-aos="fade-up" data-aos-delay="300">
                     <a href="https://renonovriansyah.github.io/jadwalkuliah" target="_blank" rel="noopener noreferrer">
                         <img src="images/project4.png" alt="TimeBlock Pro Project" class="project-image">
@@ -194,13 +371,14 @@
                         </div>
                     </a>
                 </div>
+                
             </div>
         </section>
 
         <section id="contact" class="py-24 text-center px-6">
-            <h2 class="text-3xl md:text-4xl font-bold text-white" data-aos="fade-up">Interested in collaborating?</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-white neon-title" data-aos="fade-up">Interested in collaborating?</h2>
             <p class="text-lg text-slate-400 mt-4 mb-8" data-aos="fade-up" data-aos-delay="100">Feel free to reach out to me.</p>
-            <a href="mailto:renonovriansyah9@gmail.com" class="inline-block bg-sky-400 text-slate-950 font-bold py-4 px-10 rounded-full transition-all duration-300 hover:bg-sky-300 hover:scale-105 transform" data-aos="fade-up" data-aos-delay="200">
+            <a href="mailto:renonovriansyah9@gmail.com" class="inline-block btn-gradient-border shadow-xl shadow-sky-400/50" data-aos="fade-up" data-aos-delay="200">
                 Send an Email
             </a>
         </section>
@@ -218,7 +396,6 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script>
-        // --- MAIN SCRIPT LOGIC (Gabungan Versi 1 & 2) ---
         document.addEventListener('DOMContentLoaded', function() {
             
             // 1. Initialize AOS (Animate on Scroll)
@@ -266,7 +443,7 @@
                 }, 1000);
             });
             
-            // 4. Mobile Menu Logic (dari Versi 2)
+            // 4. Mobile Menu Logic
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenuButton.addEventListener('click', () => {
@@ -277,6 +454,24 @@
                     mobileMenu.classList.add('hidden');
                 }
             });
+
+            // 5. JavaScript untuk Spotlight Effect
+            const spotlightContainer = document.querySelector('.spotlight-container');
+            if (spotlightContainer) {
+                spotlightContainer.addEventListener('mousemove', (e) => {
+                    const rect = spotlightContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    spotlightContainer.style.setProperty('--x', `${x}px`);
+                    spotlightContainer.style.setProperty('--y', `${y}px`);
+                });
+                // Menambahkan event listener untuk memastikan spotlight hilang saat mouse keluar
+                spotlightContainer.addEventListener('mouseleave', () => {
+                    // Reset posisi ke tengah atau ke nilai default untuk transisi keluar
+                    spotlightContainer.style.setProperty('--x', `50%`); 
+                    spotlightContainer.style.setProperty('--y', `50%`);
+                });
+            }
         });
     </script>
 </body>
